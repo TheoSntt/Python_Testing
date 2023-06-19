@@ -29,13 +29,13 @@ def create_app(config):
 
     @app.route('/showSummary',methods=['POST'])
     def showSummary():
-        club = [club for club in clubs if club['email'] == request.form['email']][0]
-        # try:
-        #     club = [club for club in clubs if club['email'] == request.form['email']][0]
-        # except IndexError:
-        #     # return render_template('invalid_account.html')
-        #     abort(403)
-        # return render_template('welcome.html',club=club,competitions=competitions)
+        # club = [club for club in clubs if club['email'] == request.form['email']][0]
+        try:
+            club = [club for club in clubs if club['email'] == request.form['email']][0]
+        except IndexError:
+            return render_template('invalid_account.html')
+            # abort(403)
+        return render_template('welcome.html',club=club,competitions=competitions)
 
 
 
