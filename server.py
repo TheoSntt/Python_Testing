@@ -1,17 +1,18 @@
 import json
 from flask import abort, Flask, render_template, request, redirect, flash, url_for
+from utilities.json_handler import JSON_Handler
 
 
-def loadClubs():
-    with open('db/clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+# def loadClubs():
+#     with open('db/clubs.json') as c:
+#          listOfClubs = json.load(c)['clubs']
+#          return listOfClubs
 
 
-def loadCompetitions():
-    with open('db/competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
+# def loadCompetitions():
+#     with open('db/competitions.json') as comps:
+#          listOfCompetitions = json.load(comps)['competitions']
+#          return listOfCompetitions
 
 
 
@@ -19,9 +20,10 @@ def create_app(config):
     app = Flask(__name__)
     app.secret_key = 'something_special'
     app.config.from_object(config)
+    json_handler = JSON_Handler()
 
-    competitions = loadCompetitions()
-    clubs = loadClubs()
+    competitions = json_handler.loadCompetitions()
+    clubs = json_handler.loadClubs()
 
     @app.route('/')
     def index():
