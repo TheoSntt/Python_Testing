@@ -1,5 +1,5 @@
 import json
-from flask import abort, Flask, render_template, request, redirect, flash, url_for
+from flask import abort, Flask, render_template, request, redirect, flash, url_for, session
 from utilities.json_handler import JSON_Handler
 
 
@@ -28,16 +28,32 @@ def create_app(config):
     @app.route('/')
     def index():
         return render_template('index.html')
-
-    @app.route('/showSummary',methods=['POST'])
-    def showSummary():
-        # club = [club for club in clubs if club['email'] == request.form['email']][0]
+    
+    @app.route('/login', methods=['POST'])
+    def login():
         try:
             club = [club for club in clubs if club['email'] == request.form['email']][0]
+            session['logged_club'] = club
+            return redirect(url_for('show_competitions'))
         except IndexError:
             return render_template('invalid_account.html')
-            # abort(403)
-        return render_template('competitions.html',club=club,competitions=competitions)
+
+    # @app.route('/showSummary',methods=['POST'])
+    # def showSummary():
+    #     try:
+    #         club = [club for club in clubs if club['email'] == request.form['email']][0]
+    #     except IndexError:
+    #         return render_template('invalid_account.html')
+    #         # abort(403)
+    #     return render_template('competitions.html',club=club,competitions=competitions)
+
+    @app.route('/competitions')
+    def show_competitions():
+        if 'logged_club' in session:
+            return render_template('competitions.html', club=session['logged_club'], competitions=competitions)
+        else:
+            flash("This action needs to be logged", "flash_warning")
+            return redirect(url_for('index'))
 
 
 

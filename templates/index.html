@@ -7,10 +7,14 @@
 
 
 {% block body %}
+
     {% include 'partials/navbar.html' %}
+
     <div class='content'>
         <h2>Welcome to the GUDLFT Registration Portal!</h2>
+
         {% include 'partials/flash.html' %}
+
         <p>Please enter your secretary email to continue:</p>
 
         <form action="login" method="post">
@@ -19,4 +23,5 @@
             <button type="submit">Enter</button>
         </form>
     </div>
+
 {% endblock %}

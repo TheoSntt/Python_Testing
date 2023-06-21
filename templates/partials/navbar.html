@@ -8,8 +8,8 @@
     </span>
     <span>
     {% if club %}
-        <a href="{{ url_for('showSummary', club=club['name']) }}">Competitions</a>
+        <a href="{{ url_for('show_competitions', club=club['name']) }}">Competitions</a>
     {% endif %}
-        <a href="{{ url_for('showSummary') }}">Clubs</a>
+        <a href="{{ url_for('show_competitions') }}">Clubs</a>
     </span>
 </div>
