@@ -37,7 +37,7 @@ def create_app(config):
         except IndexError:
             return render_template('invalid_account.html')
             # abort(403)
-        return render_template('welcome.html',club=club,competitions=competitions)
+        return render_template('competitions.html',club=club,competitions=competitions)
 
 
 
@@ -49,7 +49,7 @@ def create_app(config):
             return render_template('booking.html',club=foundClub,competition=foundCompetition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return render_template('competitions.html', club=club, competitions=competitions)
 
 
     @app.route('/purchasePlaces',methods=['POST'])
@@ -59,7 +59,7 @@ def create_app(config):
         placesRequired = int(request.form['places'])
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('competitions.html', club=club, competitions=competitions)
 
 
     # TODO: Add route for points display
