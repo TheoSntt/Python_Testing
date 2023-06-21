@@ -36,7 +36,8 @@ def create_app(config):
             session['logged_club'] = club
             return redirect(url_for('show_competitions'))
         except IndexError:
-            return render_template('invalid_account.html')
+            flash(f"Sorry, '{request.form['email']}' wasn't found", "flash_error")
+            return redirect(url_for('index'))
 
     # @app.route('/showSummary',methods=['POST'])
     # def showSummary():
