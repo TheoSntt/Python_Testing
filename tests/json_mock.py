@@ -2,33 +2,33 @@ from utilities.json_handler import JSON_Handler
 
 mocked_clubs = [
     {
-        "name": "Club Test 1",
+        "name": "club_test1",
         "email": "test1@email.fr",
         "points": "20"
     },
     {
-        "name": "Club Test 2",
+        "name": "club_test2",
         "email": "test2@email.fr",
         "points": "8"
     },
     {
-        "name": "Club Test 3",
+        "name": "club_test3",
         "email": "test3@email.fr",
         "points": "0"
     }]
 
 mocked_competitions = [
     {
-        "name": "Competition Test 1",
+        "name": "competition_test1",
         "date": "2025-06-22 08:00:00",
         "numberOfPlaces": "50"
     },
     {
-        "name": "name test competition 2",
+        "name": "competition_test2",
         "date": "2034-01-01 10:00:00",
         "numberOfPlaces": "15"},
     {
-        "name": "name_test_competition_3",
+        "name": "competition_test3",
         "date": "2023-11-05 09:00:00",
         "numberOfPlaces": "6"
     }]

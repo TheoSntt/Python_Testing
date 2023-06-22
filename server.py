@@ -81,7 +81,8 @@ def create_app(config):
         foundClub = [c for c in clubs if c['name'] == club][0]
         foundCompetition = [c for c in competitions if c['name'] == competition][0]
         if foundClub and foundCompetition:
-            return render_template('booking.html',club=foundClub,competition=foundCompetition)
+            maximum = booking_helper.max_places_allowed(foundCompetition, foundClub)
+            return render_template('booking.html',club=foundClub,competition=foundCompetition, max_places=maximum)
         else:
             flash("Something went wrong-please try again")
             return render_template('competitions.html', club=club, competitions=competitions)
@@ -94,7 +95,7 @@ def create_app(config):
         # Here the number of places asked is deducted from the number of places of the competition
         # But it is not deducted from the clubs points, and wether there is enough point is not checked
         # Let's add this control
-        if placesRequired <= int(booking_helper.max_places_allowed(competition, club)):
+        if placesRequired <= booking_helper.max_places_allowed(competition, club):
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             flash('Great-booking complete!', 'flash_info')
         else:
