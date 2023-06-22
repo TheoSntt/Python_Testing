@@ -14,16 +14,29 @@ from utilities.json_handler import JSON_Handler
 #          listOfCompetitions = json.load(comps)['competitions']
 #          return listOfCompetitions
 
+json_handler = JSON_Handler()
+
+def loadCompetitions():
+    json_handler.loadCompetitions()
+
+def loadClubs():
+    json_handler.loadClubs()
 
 
 def create_app(config):
     app = Flask(__name__)
     app.secret_key = 'something_special'
     app.config.from_object(config)
-    json_handler = JSON_Handler()
+    # json_handler = JSON_Handler()
 
-    competitions = json_handler.loadCompetitions()
-    clubs = json_handler.loadClubs()
+    # def loadCompetitions():
+    #     json_handler.loadCompetitions()
+    
+    # def loadClubs():
+    #     json_handler.loadClubs()
+
+    competitions = loadCompetitions()
+    clubs = loadClubs()
 
     @app.route('/')
     def index():
@@ -53,7 +66,7 @@ def create_app(config):
         if 'logged_club' in session:
             return render_template('competitions.html', club=session['logged_club'], competitions=competitions)
         else:
-            flash("This action needs to be logged", "flash_warning")
+            flash("You need to be logged to access this page", "flash_warning")
             return redirect(url_for('index'))
 
 
