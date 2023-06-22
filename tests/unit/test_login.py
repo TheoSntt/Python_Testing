@@ -1,7 +1,3 @@
-from tests.json_mock import mocked_clubs, mocked_competitions
-from unittest.mock import patch
-
-
 class TestLoginClass:
 
     def test_index(self, client):

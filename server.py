@@ -74,8 +74,6 @@ def create_app(config):
             flash("You need to be logged to access this page", "flash_warning")
             return redirect(url_for('index'))
 
-
-
     @app.route('/book/<competition>/<club>')
     def book(competition,club):
         foundClub = [c for c in clubs if c['name'] == club][0]
@@ -86,13 +84,14 @@ def create_app(config):
             flash("Something went wrong-please try again")
             return render_template('competitions.html', club=club, competitions=competitions)
 
-
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
         competition = [c for c in competitions if c['name'] == request.form['competition']][0]
         club = [c for c in clubs if c['name'] == request.form['club']][0]
         placesRequired = int(request.form['places'])
+        # Here the number of places asked is deducted from the number of places of the competition
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+        # But it is not deducted from the clubs points, and wether there is enough point is not checked.
         flash('Great-booking complete!')
         return render_template('competitions.html', club=club, competitions=competitions)
 
