@@ -14,20 +14,23 @@ from utilities.json_handler import JSON_Handler
 #          listOfCompetitions = json.load(comps)['competitions']
 #          return listOfCompetitions
 
-json_handler = JSON_Handler()
+# json_handler = JSON_Handler()
 
-def loadCompetitions():
-    json_handler.loadCompetitions()
+# def loadCompetitions():
+#     json_handler.loadCompetitions()
 
-def loadClubs():
-    json_handler.loadClubs()
+# def loadClubs():
+#     json_handler.loadClubs()
+
+# competitions = loadCompetitions()
+# clubs = loadClubs()
 
 
 def create_app(config):
     app = Flask(__name__)
     app.secret_key = 'something_special'
     app.config.from_object(config)
-    # json_handler = JSON_Handler()
+    json_handler = JSON_Handler()
 
     # def loadCompetitions():
     #     json_handler.loadCompetitions()
@@ -35,8 +38,8 @@ def create_app(config):
     # def loadClubs():
     #     json_handler.loadClubs()
 
-    competitions = loadCompetitions()
-    clubs = loadClubs()
+    competitions = json_handler.loadCompetitions()
+    clubs = json_handler.loadClubs()
 
     @app.route('/')
     def index():
@@ -45,6 +48,8 @@ def create_app(config):
     @app.route('/login', methods=['POST'])
     def login():
         try:
+            for club in clubs:
+                print(club['email'])
             club = [club for club in clubs if club['email'] == request.form['email']][0]
             session['logged_club'] = club
             return redirect(url_for('show_competitions'))
