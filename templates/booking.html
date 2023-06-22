@@ -8,12 +8,12 @@
 
 {% block body %}
 
-    {% include 'builtin/navbar.html' %}
+    {% include 'partials/navbar.html' %}
 
     <div class='content'>
         <h2>{{competition['name']}}</h2>
 
-        {% include 'builtin/flash.html' %}
+        {% include 'partials/flash.html' %}
         
         Places available: {{competition['numberOfPlaces']}}
         <form action="/purchasePlaces" method="post">
@@ -23,3 +23,4 @@
             <button type="submit">Book</button>
         </form>
     </div>
+{% endblock %}

@@ -1,6 +1,7 @@
 import json
 from flask import abort, Flask, render_template, request, redirect, flash, url_for, session
 from utilities.json_handler import JSON_Handler
+from utilities.booking_helper import Booking_Helper
 
 
 # def loadClubs():
@@ -31,6 +32,7 @@ def create_app(config):
     app.secret_key = 'something_special'
     app.config.from_object(config)
     json_handler = JSON_Handler()
+    booking_helper = Booking_Helper()
 
     # def loadCompetitions():
     #     json_handler.loadCompetitions()
@@ -90,9 +92,16 @@ def create_app(config):
         club = [c for c in clubs if c['name'] == request.form['club']][0]
         placesRequired = int(request.form['places'])
         # Here the number of places asked is deducted from the number of places of the competition
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-        # But it is not deducted from the clubs points, and wether there is enough point is not checked.
-        flash('Great-booking complete!')
+        # But it is not deducted from the clubs points, and wether there is enough point is not checked
+        # Let's add this control
+        if placesRequired <= int(booking_helper.max_places_allowed(competition, club)):
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+            flash('Great-booking complete!', 'flash_info')
+        else:
+            flash(f"You can only book a maximum of "
+                    f"{booking_helper.max_places_allowed(competition, club)}"
+                    " places",
+                    'flash_warning')
         return render_template('competitions.html', club=club, competitions=competitions)
 
 

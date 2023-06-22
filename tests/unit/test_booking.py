@@ -15,4 +15,4 @@ class TestBookingClass:
                                                         "places": 10})
         assert response.status_code == 200
         data = response.data.decode()
-        assert "You can only book a maximum of 6 places" in data
+        assert "You can only book a maximum of 8 places" in data
