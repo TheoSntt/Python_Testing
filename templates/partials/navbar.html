@@ -1,0 +1,15 @@
+<div class="navbar">
+    <span>
+        {% if club %}
+            <a href="{{ url_for('logout') }}" title="Logout"> Log out </a>
+        {% else %}
+            <a href="{{ url_for('index') }}" title="Logout"> Log in </a>
+        {% endif %}
+    </span>
+    <span>
+    {% if club %}
+        <a href="{{ url_for('show_competitions', club=club['name']) }}">Competitions</a>
+    {% endif %}
+        <a href="{{ url_for('show_competitions') }}">Clubs</a>
+    </span>
+</div>
