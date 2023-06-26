@@ -33,6 +33,7 @@ def create_app(config):
     app.config.from_object(config)
     json_handler = JSON_Handler()
     booking_helper = Booking_Helper()
+    _MAX_PLACES_PER_COMP = 12
 
     # def loadCompetitions():
     #     json_handler.loadCompetitions()
@@ -81,7 +82,7 @@ def create_app(config):
         foundClub = [c for c in clubs if c['name'] == club][0]
         foundCompetition = [c for c in competitions if c['name'] == competition][0]
         if foundClub and foundCompetition:
-            maximum = booking_helper.max_places_allowed(foundCompetition, foundClub)
+            maximum = booking_helper.max_places_allowed(foundCompetition, foundClub, _MAX_PLACES_PER_COMP)
             return render_template('booking.html',club=foundClub,competition=foundCompetition, max_places=maximum)
         else:
             flash("Something went wrong-please try again")
@@ -95,12 +96,12 @@ def create_app(config):
         # Here the number of places asked is deducted from the number of places of the competition
         # But it is not deducted from the clubs points, and wether there is enough point is not checked
         # Let's add this control
-        if placesRequired <= booking_helper.max_places_allowed(competition, club):
+        if placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             flash('Great-booking complete!', 'flash_info')
         else:
             flash(f"You can only book a maximum of "
-                    f"{booking_helper.max_places_allowed(competition, club)}"
+                    f"{booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP)}"
                     " places",
                     'flash_warning')
         return render_template('competitions.html', club=club, competitions=competitions)
