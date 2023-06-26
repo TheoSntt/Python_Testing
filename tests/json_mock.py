@@ -2,16 +2,19 @@ from utilities.json_handler import JSON_Handler
 
 mocked_clubs = [
     {
+        "id": "1",
         "name": "club_test1",
         "email": "test1@email.fr",
         "points": "30"
     },
     {
+        "id": "2",
         "name": "club_test2",
         "email": "test2@email.fr",
         "points": "8"
     },
     {
+        "id": "3",
         "name": "club_test3",
         "email": "test3@email.fr",
         "points": "0"
