@@ -65,12 +65,9 @@ def create_app(config):
         competition = [c for c in competitions if c['name'] == request.form['competition']][0]
         club = [c for c in clubs if c['name'] == request.form['club']][0]
         placesRequired = int(request.form['places'])
-        # Here the number of places asked is deducted from the number of places of the competition
-        # But it is not deducted from the clubs points, and wether there is enough point is not checked
-        # Let's add this control
-        print(placesRequired)
-        print(booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP))
-        if placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
+        if booking_helper.is_competition_passed(competition):
+            flash(f"The competition is closed since {competition['date']}", 'flash_warning')
+        elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
             # Remove the number of places booked from the competition
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             # Remove the number of places booked from the club's points
