@@ -4,28 +4,6 @@ from utilities.json_handler import JSON_Handler
 from utilities.booking_helper import Booking_Helper
 
 
-# def loadClubs():
-#     with open('db/clubs.json') as c:
-#          listOfClubs = json.load(c)['clubs']
-#          return listOfClubs
-
-
-# def loadCompetitions():
-#     with open('db/competitions.json') as comps:
-#          listOfCompetitions = json.load(comps)['competitions']
-#          return listOfCompetitions
-
-# json_handler = JSON_Handler()
-
-# def loadCompetitions():
-#     json_handler.loadCompetitions()
-
-# def loadClubs():
-#     json_handler.loadClubs()
-
-# competitions = loadCompetitions()
-# clubs = loadClubs()
-
 
 def create_app(config):
     app = Flask(__name__)
@@ -35,14 +13,8 @@ def create_app(config):
     booking_helper = Booking_Helper()
     _MAX_PLACES_PER_COMP = 12
 
-    # def loadCompetitions():
-    #     json_handler.loadCompetitions()
-    
-    # def loadClubs():
-    #     json_handler.loadClubs()
-
-    competitions = json_handler.loadCompetitions()
-    clubs = json_handler.loadClubs()
+    competitions = json_handler.load_json('competitions')
+    clubs = json_handler.load_json('clubs')
 
     @app.route('/')
     def index():

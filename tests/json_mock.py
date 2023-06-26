@@ -36,6 +36,15 @@ mocked_competitions = [
         "numberOfPlaces": "6"
     }]
 
+@staticmethod
+def mock_load_json(file_name):
+    if 'clubs' in file_name:
+        return mocked_clubs
+    elif 'competitions' in file_name:
+        return mocked_competitions
+    else:
+        return []
+
 
 # class JSON_mock():
 #     """ Class that mocks the json files acting as database."""
