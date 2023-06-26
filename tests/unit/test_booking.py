@@ -95,7 +95,7 @@ class TestBookingClass:
         response = client.get('/book/competition_test1/club_test1')
         assert response.status_code == 200
         data = response.data.decode()
-        assert 'name="places" value="1" min="1" max="0"' in data
+        assert 'name="places" value="1" min="1" max="2"' in data
 
         # Competition : 15 places / Club : 20 points
         response = client.get('/book/competition_test2/club_test1')
