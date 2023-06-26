@@ -73,10 +73,8 @@ def create_app(config):
         if placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
             # Remove the number of places booked from the competition
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-            """
             # Remove the number of places booked from the club's points
             club['points'] = int(club['points']) - placesRequired
-            """
             # Store the number of places booked by this club for this competition, so that the limit of 12 splaces
             # booked is respected even with multiple requests (like booking 5 places, then 5 more, then 5 more).
             # Add (or update if it preexists) a new entry in the competition dict with the clubs ID as a key and 
@@ -87,9 +85,7 @@ def create_app(config):
                 competition[club['id']] = placesRequired
             # Save both JSON files
             json_handler.update_json('competitions', competition)
-            """
             json_handler.update_json('clubs', club)
-            """
             # Confirmation message
             flash('Great-booking complete!', 'flash_info')
         else:
