@@ -106,3 +106,11 @@ class TestBookingClass:
         response = client.get('/book/competition_test3/club_test1')
         data = response.data.decode()
         assert 'name="places" value="1" min="1" max="6"' in data
+
+    def test_booking_in_past_competition_should_fail(self, client):
+        response = client.post("/purchasePlaces", data={"competition": "competition_test4",
+                                                        "club": "club_test1",
+                                                        "places": 1})
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert "The competition is closed" in data

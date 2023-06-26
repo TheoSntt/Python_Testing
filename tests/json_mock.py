@@ -34,6 +34,11 @@ mocked_competitions = [
         "name": "competition_test3",
         "date": "2023-11-05 09:00:00",
         "numberOfPlaces": "6"
+    },
+    {
+        "name": "competition_test4",
+        "date": "2020-11-05 09:00:00",
+        "numberOfPlaces": "6000"
     }]
 
 @staticmethod
