@@ -24,6 +24,21 @@ class TestBookingClass:
         assert response.status_code == 200
         data = response.data.decode()
         assert "You can only book a maximum of 12 places" in data
+    
+    def test_booking_more_than_12_places_in_two_iterations_should_fail(self, client):
+        response = client.post("/purchasePlaces", data={"competition": "competition_test1",
+                                                        "club": "club_test1",
+                                                        "places": 12})
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert "Great-booking complete!" in data
+        # Second iteration
+        response = client.post("/purchasePlaces", data={"competition": "competition_test1",
+                                                        "club": "club_test1",
+                                                        "places": 12})
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert "You can only book a maximum of 12 places" in data
 
     
     def test_booking_max_allowed_places_respected_in_ui(self, client):

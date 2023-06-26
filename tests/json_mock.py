@@ -4,7 +4,7 @@ mocked_clubs = [
     {
         "name": "club_test1",
         "email": "test1@email.fr",
-        "points": "20"
+        "points": "30"
     },
     {
         "name": "club_test2",
