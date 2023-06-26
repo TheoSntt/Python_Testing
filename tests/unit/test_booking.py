@@ -1,6 +1,19 @@
-class TestBookingClass:
+from tests.json_mock import mock_load_json
 
-    
+
+class TestBookingClass:
+    """
+    STARTING POINT :
+
+    CLUB 1 Points : 30
+    CLUB 2 Points : 8
+    CLUB 3 Points : 0
+    _______
+
+    COMP 1 Places : 50
+    COMP 2 Places : 15
+    COMP 3 Places : 6
+    """
     def test_booking_less_places_than_available_points_should_success(self, client):
         response = client.post("/purchasePlaces", data={"competition": "competition_test1",
                                                         "club": "club_test2",
@@ -8,15 +21,33 @@ class TestBookingClass:
         assert response.status_code == 200
         data = response.data.decode()
         assert "Great-booking complete!" in data
+    """
+    CLUB 1 Points : 30
+    CLUB 2 Points : 8 (because we don't deduct the points yet)
+    CLUB 3 Points : 0
+    _______
 
+    COMP 1 Places : 44 (6 booked by club 2)
+    COMP 2 Places : 15
+    COMP 3 Places : 6
+    """
     def test_booking_more_places_than_available_points_should_fail(self, client):
         response = client.post("/purchasePlaces", data={"competition": "competition_test1",
-                                                        "club": "club_test2",
+                                                        "club": "club_test3",
                                                         "places": 10})
         assert response.status_code == 200
         data = response.data.decode()
-        assert "You can only book a maximum of 8 places" in data
-    
+        assert "You can only book a maximum of 0 places" in data
+    """
+    CLUB 1 Points : 30
+    CLUB 2 Points : 8 (because we don't deduct the points yet)
+    CLUB 3 Points : 0
+    _______
+
+    COMP 1 Places : 44 (6 booked by club 2)
+    COMP 2 Places : 15
+    COMP 3 Places : 6
+    """
     def test_booking_more_than_12_places_should_fail(self, client):
         response = client.post("/purchasePlaces", data={"competition": "competition_test1",
                                                         "club": "club_test1",
@@ -26,31 +57,44 @@ class TestBookingClass:
         assert "You can only book a maximum of 12 places" in data
     
     def test_booking_more_than_12_places_in_two_iterations_should_fail(self, client):
+        # Trying to book 8 more places by club 2 who already booked 6
+        response = client.post("/purchasePlaces", data={"competition": "competition_test1",
+                                                        "club": "club_test2",
+                                                        "places": 8})
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert "You can only book a maximum of 6 places" in data
+        # Now trying to buy 12 places twice with club 1. First one should work
         response = client.post("/purchasePlaces", data={"competition": "competition_test1",
                                                         "club": "club_test1",
                                                         "places": 12})
         assert response.status_code == 200
         data = response.data.decode()
         assert "Great-booking complete!" in data
-        # Second iteration
+        # Second iteration should fail
         response = client.post("/purchasePlaces", data={"competition": "competition_test1",
                                                         "club": "club_test1",
                                                         "places": 12})
         assert response.status_code == 200
         data = response.data.decode()
-        assert "You can only book a maximum of 12 places" in data
+        assert "You can only book a maximum of 0 places" in data
 
     
     def test_booking_max_allowed_places_respected_in_ui(self, client):
+        """
+        CLUB 1 Points : 30 (because we don't deduct the points yet)
+        CLUB 2 Points : 8 (because we don't deduct the points yet)
+        CLUB 3 Points : 0
+        _______
 
-        # with client.session_transaction() as session:
-        #     session["logged_club"] = {'name': 'club_test1'}
-
-        # Competition : 50 places / Club : 20 points
+        COMP 1 Places : 32 (6 booked by club 2, 12 by club 1)
+        COMP 2 Places : 15
+        COMP 3 Places : 6
+        """
         response = client.get('/book/competition_test1/club_test1')
         assert response.status_code == 200
         data = response.data.decode()
-        assert 'name="places" value="1" min="1" max="12"' in data
+        assert 'name="places" value="1" min="1" max="0"' in data
 
         # Competition : 15 places / Club : 20 points
         response = client.get('/book/competition_test2/club_test1')

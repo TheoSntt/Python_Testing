@@ -23,15 +23,13 @@ class JSON_Handler:
             return json.load(file)[file_name]
     
     def save_json(self, file_name, data):
-        """ Open/create the file db/file_name.json with the list of dicts 'data'
+        """ Open the file db/file_name.json with the list of dicts 'data'
             This list will be saved in a dict, in the field {file_name} """
         with open(f'db/{file_name}.json', 'w') as file:
             json.dump({file_name: data}, file, indent=True)
     
     def update_json(self, file_name, data):
-        """ Update an entry in the '/db/file_name.json
-            If the file already contains an entry with the field 'name', the latter will be erase.
-            Otherwise, it just adds 'data' and save the file. """
+        """ Update an entry in the '/db/file_name.json and save the file. """
         tab = self.load_json(file_name)
         for entry in tab:
             if entry['name'] == data['name']:

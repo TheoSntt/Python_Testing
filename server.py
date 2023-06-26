@@ -68,8 +68,29 @@ def create_app(config):
         # Here the number of places asked is deducted from the number of places of the competition
         # But it is not deducted from the clubs points, and wether there is enough point is not checked
         # Let's add this control
+        print(placesRequired)
+        print(booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP))
         if placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
+            # Remove the number of places booked from the competition
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+            """
+            # Remove the number of places booked from the club's points
+            club['points'] = int(club['points']) - placesRequired
+            """
+            # Store the number of places booked by this club for this competition, so that the limit of 12 splaces
+            # booked is respected even with multiple requests (like booking 5 places, then 5 more, then 5 more).
+            # Add (or update if it preexists) a new entry in the competition dict with the clubs ID as a key and 
+            # the number of booked places as a value.
+            if club['id'] in competition:
+                competition[club['id']] = int(competition[club['id']]) + placesRequired
+            else:
+                competition[club['id']] = placesRequired
+            # Save both JSON files
+            json_handler.update_json('competitions', competition)
+            """
+            json_handler.update_json('clubs', club)
+            """
+            # Confirmation message
             flash('Great-booking complete!', 'flash_info')
         else:
             flash(f"You can only book a maximum of "
