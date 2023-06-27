@@ -93,7 +93,15 @@ def create_app(config):
         return render_template('competitions.html', club=club, competitions=competitions)
 
 
-    # TODO: Add route for points display
+    @app.route('/showClubs')
+    def show_clubs():
+        clubs = json_handler.load_json('clubs')
+        clubs.sort(key=lambda club: club['name'].lower())  # Sort by name
+
+        if 'logged_club' in session:
+            return render_template('clubs.html', clubs=clubs, club=session['logged_club'])
+        else:
+            return render_template('clubs.html', clubs=clubs)
 
 
     @app.route('/logout')

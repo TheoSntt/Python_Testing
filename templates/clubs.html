@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>List of clubs || GUDLFT</title>
+{% endblock %}
+
+{% block body %}
+
+    {% include 'partials/navbar.html' %}
+
+    <div class='content'>
+        <h2>List of clubs</h2>
+
+        {% include 'partials/flash.html' %}
+        <ul>
+        {% for club in clubs %}
+        <li>
+            <b>{{ club['name'] }}</b><br/>
+            {{ club['email'] }}<br/>
+            Points: {{ club['points'] }}
+        </li>
+        <hr/>
+        {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

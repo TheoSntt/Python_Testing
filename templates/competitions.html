@@ -15,7 +15,7 @@
         <ul>
             {% for comp in competitions%}
             <li>
-                {{comp['name']}}<br />
+                {{comp['name']}}<br/>
                 Date: {{comp['date']}}</br>
                 Number of Places: {{comp['numberOfPlaces']}}
                 {%if comp['numberOfPlaces']|int >0%}
