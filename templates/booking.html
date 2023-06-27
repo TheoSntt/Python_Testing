@@ -14,8 +14,16 @@
         <h2>{{competition['name']}}</h2>
 
         {% include 'partials/flash.html' %}
-        
-        Places available: {{competition['numberOfPlaces']}}
+
+        <ul>
+            <li>Remaining places : {{ competition['numberOfPlaces'] }}</li>
+            {% if club['id'] in competition %}
+                <li>Already booked by your club: {{ competition[club['id']] }}</li>
+            {% endif %}
+            <li>Club points: {{ club['points'] }}</li>
+            <li>Available places for your club: {{ max_places }}</li>
+        </ul>
+
         <form action="/purchasePlaces" method="post">
             <input type="hidden" name="club" value="{{club['name']}}">
             <input type="hidden" name="competition" value="{{competition['name']}}">
