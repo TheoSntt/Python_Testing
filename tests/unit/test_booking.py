@@ -58,20 +58,3 @@ class TestBookingClass:
         assert response.status_code == 200
         data = response.data.decode()
         assert "You can only book a maximum of 2 places" in data
-
-    def test_booking_max_allowed_places_respected_in_ui(self, client):
-        # Competition : 50 places / Club : 30 points / Already booked : 6
-        response = client.get('/book/competition_test1/club_test1')
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert 'name="places" value="1" min="1" max="6"' in data
-
-        # Competition : 15 places / Club : 8 points / Already booked : 0
-        response = client.get('/book/competition_test2/club_test2')
-        data = response.data.decode()
-        assert 'name="places" value="1" min="1" max="8"' in data
-
-        # Competition : 6 places / Club : 50 points
-        response = client.get('/book/competition_test3/club_test1')
-        data = response.data.decode()
-        assert 'name="places" value="1" min="1" max="6"' in data

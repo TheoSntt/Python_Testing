@@ -1,4 +1,4 @@
-class TestBookingClass:
+class TestBookingDatesClass:
     """
     DATA :
 

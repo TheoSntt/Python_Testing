@@ -19,14 +19,14 @@ class TestHelperFunctions:
 
         COMP 1 Places : 50 (6 booked by club 1, 6 booked by club 2)
         COMP 2 Places : 15
-        COMP 3 Places : 6
+        COMP 3 Places : 6 (12 booked by club 2)
         """
         assert self.helper.max_places_allowed(competitions[0], clubs[0], _MAX_PLACE) == 6
         assert self.helper.max_places_allowed(competitions[1], clubs[0], _MAX_PLACE) == 12
         assert self.helper.max_places_allowed(competitions[1], clubs[1], _MAX_PLACE) == 8
         assert self.helper.max_places_allowed(competitions[2], clubs[0], _MAX_PLACE) == 6
         assert self.helper.max_places_allowed(competitions[2], clubs[2], _MAX_PLACE) == 0
-        assert self.helper.max_places_allowed(competitions[2], clubs[1], _MAX_PLACE) == 6
+        assert self.helper.max_places_allowed(competitions[2], clubs[1], _MAX_PLACE) == 0
         assert self.helper.max_places_allowed(competitions[3], clubs[0], _MAX_PLACE) == 12
 
     def test_is_competition_pass_the_deadline(self):
