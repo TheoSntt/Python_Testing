@@ -11,6 +11,6 @@ class Booking_Helper:
         print(max_places_per_comp)
         return min(int(competition['numberOfPlaces']), int(club['points']), int(max_places_per_comp))
     
-    def is_competition_passed(self, competition):
+    def is_competition_past(self, competition):
         """ Return true if the competition's datetime is inferior than the current datetime, meaning it's passed."""
         return datetime.fromisoformat(competition['date']) < datetime.now()

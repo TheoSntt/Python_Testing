@@ -65,7 +65,7 @@ def create_app(config):
         competition = [c for c in competitions if c['name'] == request.form['competition']][0]
         club = [c for c in clubs if c['name'] == request.form['club']][0]
         placesRequired = int(request.form['places'])
-        if booking_helper.is_competition_passed(competition):
+        if booking_helper.is_competition_past(competition):
             flash(f"The competition is closed since {competition['date']}", 'flash_warning')
         elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
             # Remove the number of places booked from the competition

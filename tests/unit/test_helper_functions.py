@@ -28,3 +28,12 @@ class TestHelperFunctions:
         assert self.helper.max_places_allowed(competitions[2], clubs[2], _MAX_PLACE) == 0
         assert self.helper.max_places_allowed(competitions[2], clubs[1], _MAX_PLACE) == 6
         assert self.helper.max_places_allowed(competitions[3], clubs[0], _MAX_PLACE) == 12
+
+    def test_is_competition_pass_the_deadline(self):
+
+        competitions = mock_load_json("competitions")
+
+        assert self.helper.is_competition_past(competitions[0]) is False
+        assert self.helper.is_competition_past(competitions[1]) is False
+        assert self.helper.is_competition_past(competitions[2]) is False
+        assert self.helper.is_competition_past(competitions[3]) is True
