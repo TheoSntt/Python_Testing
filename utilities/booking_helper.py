@@ -2,8 +2,9 @@ from datetime import datetime
 
 class Booking_Helper:
     """Utility class that includes functions that handle the business logics behind competition booking"""
-    
-    def max_places_allowed(self, competition, club, max_places_per_comp):
+    _MAX_PLACES_PER_COMP = 12
+
+    def max_places_allowed(self, competition, club, max_places_per_comp=_MAX_PLACES_PER_COMP):
         """ Return the max number of places a given club can book in a given competition."""
         if club['id'] in competition:
             print(competition)

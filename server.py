@@ -11,7 +11,10 @@ def create_app(config):
     app.config.from_object(config)
     json_handler = JSON_Handler()
     booking_helper = Booking_Helper()
-    _MAX_PLACES_PER_COMP = 12
+    # _MAX_PLACES_PER_COMP = 12
+
+    app.jinja_env.globals['max_places_allowed'] = booking_helper.max_places_allowed
+    app.jinja_env.globals['is_competition_past'] = booking_helper.is_competition_past
 
     competitions = json_handler.load_json('competitions')
     clubs = json_handler.load_json('clubs')
@@ -54,7 +57,8 @@ def create_app(config):
         foundClub = [c for c in clubs if c['name'] == club][0]
         foundCompetition = [c for c in competitions if c['name'] == competition][0]
         if foundClub and foundCompetition:
-            maximum = booking_helper.max_places_allowed(foundCompetition, foundClub, _MAX_PLACES_PER_COMP)
+            # maximum = booking_helper.max_places_allowed(foundCompetition, foundClub, _MAX_PLACES_PER_COMP)
+            maximum = booking_helper.max_places_allowed(foundCompetition, foundClub)
             return render_template('booking.html',club=foundClub,competition=foundCompetition, max_places=maximum)
         else:
             flash("Something went wrong-please try again")
@@ -67,7 +71,8 @@ def create_app(config):
         placesRequired = int(request.form['places'])
         if booking_helper.is_competition_past(competition):
             flash(f"The competition is closed since {competition['date']}", 'flash_warning')
-        elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
+        # elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
+        elif placesRequired <= booking_helper.max_places_allowed(competition, club):
             # Remove the number of places booked from the competition
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             # Remove the number of places booked from the club's points
@@ -87,7 +92,8 @@ def create_app(config):
             flash('Great-booking complete!', 'flash_info')
         else:
             flash(f"You can only book a maximum of "
-                    f"{booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP)}"
+                    # f"{booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP)}"
+                    f"{booking_helper.max_places_allowed(competition, club)}"
                     " places",
                     'flash_warning')
         return render_template('competitions.html', club=club, competitions=competitions)
