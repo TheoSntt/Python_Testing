@@ -15,24 +15,30 @@ class TestBookingUIClass:
     COMP 3 Places : 6
     """
     def test_booking_max_allowed_places_respected_in_ui(self, client):
-        # Logging as club 1
         clubs = mock_load_json("clubs")
+        
+        # Logging as club 1
         with client.session_transaction() as session:
             session["logged_club"] = clubs[0]
-        # Booking the places
         # Competition : 50 places / Club : 30 points / Already booked : 6
-        response = client.get('/book/competition_test1/club_test1')
+        response = client.get('/book/competition_test1')
         assert response.status_code == 200
         data = response.data.decode()
         assert 'name="places" value="1" min="1" max="6"' in data
-
+        
+        # Logging as club 2
+        with client.session_transaction() as session:
+            session["logged_club"] = clubs[1]
         # Competition : 15 places / Club : 8 points / Already booked : 0
-        response = client.get('/book/competition_test2/club_test2')
+        response = client.get('/book/competition_test2')
         data = response.data.decode()
         assert 'name="places" value="1" min="1" max="8"' in data
-
+        
+        # Logging as club 1
+        with client.session_transaction() as session:
+            session["logged_club"] = clubs[0]
         # Competition : 6 places / Club : 50 points
-        response = client.get('/book/competition_test3/club_test1')
+        response = client.get('/book/competition_test3')
         data = response.data.decode()
         assert 'name="places" value="1" min="1" max="6"' in data
 
@@ -47,10 +53,10 @@ class TestBookingUIClass:
         response = client.get("/competitions")
         assert response.status_code == 200
         data = response.data.decode()
-        assert '<a href="/book/competition_test1/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test2/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test3/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test5/club_test1">Book Places</a>' not in data
+        assert '<a href="/book/competition_test1">Book Places</a>' in data
+        assert '<a href="/book/competition_test2">Book Places</a>' in data
+        assert '<a href="/book/competition_test3">Book Places</a>' in data
+        assert '<a href="/book/competition_test5">Book Places</a>' not in data
         
         # Test with third club, who has no points
         with client.session_transaction() as session:
@@ -59,10 +65,10 @@ class TestBookingUIClass:
         response = client.get("/competitions")
         assert response.status_code == 200
         data = response.data.decode()
-        assert '<a href="/book/competition_test1/club_test3">Book Places</a>' not in data
-        assert '<a href="/book/competition_test2/club_test3">Book Places</a>' not in data
-        assert '<a href="/book/competition_test3/club_test3">Book Places</a>' not in data
-        assert '<a href="/book/competition_test5/club_test3">Book Places</a>' not in data
+        assert '<a href="/book/competition_test1">Book Places</a>' not in data
+        assert '<a href="/book/competition_test2">Book Places</a>' not in data
+        assert '<a href="/book/competition_test3">Book Places</a>' not in data
+        assert '<a href="/book/competition_test5">Book Places</a>' not in data
 
         # Test with second club, who has points, but has already booked 12 places in third comp
         with client.session_transaction() as session:
@@ -71,10 +77,10 @@ class TestBookingUIClass:
         response = client.get("/competitions")
         assert response.status_code == 200
         data = response.data.decode()
-        assert '<a href="/book/competition_test1/club_test2">Book Places</a>' in data
-        assert '<a href="/book/competition_test2/club_test2">Book Places</a>' in data
-        assert '<a href="/book/competition_test3/club_test2">Book Places</a>' not in data
-        assert '<a href="/book/competition_test5/club_test2">Book Places</a>' not in data
+        assert '<a href="/book/competition_test1">Book Places</a>' in data
+        assert '<a href="/book/competition_test2">Book Places</a>' in data
+        assert '<a href="/book/competition_test3">Book Places</a>' not in data
+        assert '<a href="/book/competition_test5">Book Places</a>' not in data
 
 
     def test_booking_link_not_diplayed_for_past_competition(self, client):
@@ -88,10 +94,10 @@ class TestBookingUIClass:
         response = client.get("/competitions")
         assert response.status_code == 200
         data = response.data.decode()
-        assert '<a href="/book/competition_test1/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test2/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test3/club_test1">Book Places</a>' in data
-        assert '<a href="/book/competition_test4/club_test1">Book Places</a>' not in data
+        assert '<a href="/book/competition_test1">Book Places</a>' in data
+        assert '<a href="/book/competition_test2">Book Places</a>' in data
+        assert '<a href="/book/competition_test3">Book Places</a>' in data
+        assert '<a href="/book/competition_test4">Book Places</a>' not in data
        
         # Test with second club
         with client.session_transaction() as session:
@@ -100,6 +106,6 @@ class TestBookingUIClass:
         response = client.get("/competitions")
         assert response.status_code == 200
         data = response.data.decode()
-        assert '<a href="/book/competition_test1/club_test2">Book Places</a>' in data
-        assert '<a href="/book/competition_test2/club_test2">Book Places</a>' in data
-        assert '<a href="/book/competition_test4/club_test2">Book Places</a>' not in data
+        assert '<a href="/book/competition_test1">Book Places</a>' in data
+        assert '<a href="/book/competition_test2">Book Places</a>' in data
+        assert '<a href="/book/competition_test4">Book Places</a>' not in data

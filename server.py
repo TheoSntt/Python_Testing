@@ -52,9 +52,10 @@ def create_app(config):
             flash("You need to be logged to access this page", "flash_warning")
             return redirect(url_for('index'))
 
-    @app.route('/book/<competition>/<club>')
-    def book(competition,club):
+    @app.route('/book/<competition>')
+    def book(competition):
         if 'logged_club' in session:
+            club = session['logged_club']['name']
             foundClub = [c for c in clubs if c['name'] == club][0]
             foundCompetition = [c for c in competitions if c['name'] == competition][0]
             if foundClub and foundCompetition:

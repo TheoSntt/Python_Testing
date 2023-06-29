@@ -19,7 +19,7 @@
                 Date: {{competition['date']}}</br>
                 Number of Places: {{competition['numberOfPlaces']}}
                 {% if not is_competition_past(competition) and max_places_allowed(competition, club) > 0 %}
-                    <a href="{{ url_for('book',competition=competition['name'],club=club['name']) }}">Book Places</a>
+                    <a href="{{ url_for('book',competition=competition['name']) }}">Book Places</a>
                 {% endif %}
             </li>
             <hr />
