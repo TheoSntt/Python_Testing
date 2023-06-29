@@ -7,9 +7,7 @@ class Booking_Helper:
     def max_places_allowed(self, competition, club, max_places_per_comp=_MAX_PLACES_PER_COMP):
         """ Return the max number of places a given club can book in a given competition."""
         if club['id'] in competition:
-            print(competition)
             max_places_per_comp -= int(competition[club['id']])
-        print(max_places_per_comp)
         return min(int(competition['numberOfPlaces']), int(club['points']), int(max_places_per_comp))
     
     def is_competition_past(self, competition):

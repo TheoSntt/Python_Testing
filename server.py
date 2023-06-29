@@ -26,8 +26,6 @@ def create_app(config):
     @app.route('/login', methods=['POST'])
     def login():
         try:
-            for club in clubs:
-                print(club['email'])
             club = [club for club in clubs if club['email'] == request.form['email']][0]
             session['logged_club'] = club
             return redirect(url_for('show_competitions'))
