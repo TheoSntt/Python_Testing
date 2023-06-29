@@ -99,7 +99,7 @@ def create_app(config):
         return render_template('competitions.html', club=club, competitions=competitions)
 
 
-    @app.route('/showClubs')
+    @app.route('/clubs')
     def show_clubs():
         clubs = json_handler.load_json('clubs')
         clubs.sort(key=lambda club: club['name'].lower())  # Sort by name
