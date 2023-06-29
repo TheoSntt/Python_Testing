@@ -15,6 +15,11 @@ class TestBookingUIClass:
     COMP 3 Places : 6
     """
     def test_booking_max_allowed_places_respected_in_ui(self, client):
+        # Logging as club 1
+        clubs = mock_load_json("clubs")
+        with client.session_transaction() as session:
+            session["logged_club"] = clubs[0]
+        # Booking the places
         # Competition : 50 places / Club : 30 points / Already booked : 6
         response = client.get('/book/competition_test1/club_test1')
         assert response.status_code == 200

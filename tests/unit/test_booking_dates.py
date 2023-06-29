@@ -1,3 +1,6 @@
+from tests.json_mock import mock_load_json
+
+
 class TestBookingDatesClass:
     """
     DATA :
@@ -12,6 +15,11 @@ class TestBookingDatesClass:
     COMP 3 Places : 6
     """
     def test_booking_a_future_competition_should_sucess(self, client, monkeypatch):
+        # Logging as club 1
+        clubs = mock_load_json("clubs")
+        with client.session_transaction() as session:
+            session["logged_club"] = clubs[0]
+        # Booking the places
         response = client.post("/purchasePlaces", data={"competition": "competition_test3",
                                                         "club": "club_test1",
                                                         "places": 1})
@@ -24,6 +32,11 @@ class TestBookingDatesClass:
         assert "Great-booking complete" in data
 
     def test_booking_in_past_competition_should_fail(self, client):
+        # Logging as club 1
+        clubs = mock_load_json("clubs")
+        with client.session_transaction() as session:
+            session["logged_club"] = clubs[0]
+        # Booking the places
         response = client.post("/purchasePlaces", data={"competition": "competition_test4",
                                                         "club": "club_test1",
                                                         "places": 1})

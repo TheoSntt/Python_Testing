@@ -1,13 +1,13 @@
 class TestClubs:
 
     def test_clubs_url(self, client):
-        response = client.get("/showClubs")
+        response = client.get("/clubs")
         assert response.status_code == 200
         data = response.data.decode()
         assert "List of clubs || GUDLFT" in data
     
     def test_list_display(self, client):
-        response = client.get('/showClubs')
+        response = client.get('/clubs')
         assert response.status_code == 200
         data = response.data.decode()
         assert 'club_test1' in data
