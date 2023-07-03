@@ -33,15 +33,6 @@ def create_app(config):
             flash(f"No account exists with this mail : '{request.form['email']}'", "flash_error")
             return redirect(url_for('index'))
 
-    # @app.route('/showSummary',methods=['POST'])
-    # def showSummary():
-    #     try:
-    #         club = [club for club in clubs if club['email'] == request.form['email']][0]
-    #     except IndexError:
-    #         return render_template('invalid_account.html')
-    #         # abort(403)
-    #     return render_template('competitions.html',club=club,competitions=competitions)
-
     @app.route('/competitions')
     def show_competitions():
         if 'logged_club' in session:
@@ -104,8 +95,6 @@ def create_app(config):
         else:
             flash("You need to be logged to access this page", "flash_warning")
             return redirect(url_for('index'))
-    
-
 
     @app.route('/clubs')
     def show_clubs():
@@ -116,7 +105,6 @@ def create_app(config):
             return render_template('clubs.html', clubs=clubs, club=session['logged_club'])
         else:
             return render_template('clubs.html', clubs=clubs)
-
 
     @app.route('/logout')
     def logout():
