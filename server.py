@@ -11,11 +11,14 @@ def create_app(config):
     app.config.from_object(config)
     json_handler = JSON_Handler()
     booking_helper = Booking_Helper()
-    # _MAX_PLACES_PER_COMP = 12
-
+    # When launching the app for Locust, move the place limit up so to adequately test the response time for place purchase
+    _MAX_PLACES_PER_COMP = 100000 if 'LOCUST' in config else 12
+    # For Locust, We need to reload the JSON later. Use this variable to only do it once.
+    _LOCUST_RELOAD = False
+    # Declare helper functions as jinja globals to use them in templates
     app.jinja_env.globals['max_places_allowed'] = booking_helper.max_places_allowed
     app.jinja_env.globals['is_competition_past'] = booking_helper.is_competition_past
-
+    # Load the clubs and competitions
     competitions = json_handler.load_json('competitions')
     clubs = json_handler.load_json('clubs')
 
@@ -48,8 +51,7 @@ def create_app(config):
             foundClub = [c for c in clubs if c['name'] == club][0]
             foundCompetition = [c for c in competitions if c['name'] == competition][0]
             if foundClub and foundCompetition:
-                # maximum = booking_helper.max_places_allowed(foundCompetition, foundClub, _MAX_PLACES_PER_COMP)
-                maximum = booking_helper.max_places_allowed(foundCompetition, foundClub)
+                maximum = booking_helper.max_places_allowed(foundCompetition, foundClub, _MAX_PLACES_PER_COMP)
                 return render_template('booking.html',club=foundClub,competition=foundCompetition, max_places=maximum)
             else:
                 flash("Something went wrong-please try again")
@@ -60,14 +62,23 @@ def create_app(config):
 
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
+        # If the case we are testing the app with Locust, we need to reload the JSON at this step
+        nonlocal _LOCUST_RELOAD
+        # This is what this block is for.
+        if 'LOCUST' in config and _LOCUST_RELOAD is False :
+            nonlocal competitions
+            nonlocal clubs
+            competitions = json_handler.load_json('competitions')
+            clubs = json_handler.load_json('clubs')
+            _LOCUST_RELOAD = True
+        # Bulk of the function : retrieve comp and club and do the appropriate actions on points and places
         if 'logged_club' in session:
             competition = [c for c in competitions if c['name'] == request.form['competition']][0]
             club = [c for c in clubs if c['name'] == request.form['club']][0]
             placesRequired = int(request.form['places'])
             if booking_helper.is_competition_past(competition):
                 flash(f"The competition is closed since {competition['date']}", 'flash_warning')
-            # elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
-            elif placesRequired <= booking_helper.max_places_allowed(competition, club):
+            elif placesRequired <= booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP):
                 # Remove the number of places booked from the competition
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
                 # Remove the number of places booked from the club's points
@@ -87,8 +98,7 @@ def create_app(config):
                 flash('Great-booking complete!', 'flash_info')
             else:
                 flash(f"You can only book a maximum of "
-                        # f"{booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP)}"
-                        f"{booking_helper.max_places_allowed(competition, club)}"
+                        f"{booking_helper.max_places_allowed(competition, club, _MAX_PLACES_PER_COMP)}"
                         " places",
                         'flash_warning')
             return render_template('competitions.html', club=club, competitions=competitions)
@@ -113,8 +123,6 @@ def create_app(config):
 
 
     return app
-
-
 
 
 if __name__ == "__main__":
