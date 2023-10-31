@@ -1,51 +1,53 @@
-# gudlift-registration
 
-1. Why
-
-
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
-
-2. Getting Started
-
-    This project uses the following technologies:
-
-    * Python v3.x+
-
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
-
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
-
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
-
-        Before you begin, please ensure you have this installed globally. 
+# GUDLIFT
 
 
-3. Installation
+## Description du projet
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+Ce projet, réalisé dans le cadre de ma formation OpenClassrooms était centré sur les notions de débugage et de tests. L'application Flask, très basique, a été fournie par OpenClassrooms comme base de travail. L'objectif du projet était de débuguer l'application, d'y ajouter quelques fonctionnalités, et de rédiger des tests unitaires, d'intégration, et de performance.  
+Les différentes évolutions apportées à l'application ont été réalisées en TDD (test driven development).  
+Ce projet m'a permis d'apprendre le développement de tests, notamment des tests unitaires avec Pytest. Il m'a aussi permis d'appréhender le TDD, et d'avoir une introduction aux applications Flask.
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
+## Mise en place et exécution en local de l'application
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
+1. Téléchargez le projet depuis Github. Soit directement (format zip), soit en clonant le projet en utilisant la commande suivante dans Git Bash :  
+```
+git clone https://github.com/TheoSntt/python-testing
+```
+2. Créez un environnement virtuel Python en exécutant la commande suivantes dans le Terminal de votre choix :
+```
+python -m venv env (env étant le nom de l'environnement, vous pouvez le changer)
+```
+Puis, toujours dans le terminal, activez votre environnement avec la commande suivante si vous êtes sous Linux :
+```
+source env/bin/activate
+```
+Ou bien celle-ci si vous êtes sous Windows
+```
+env/Scripts/activate.bat
+```
+3. Dans vorte environnement virtuel, téléchargez les packages Python nécessaires à la bonne exécution de l'application à l'aide de la commande suivante :
+```
+pip install -r requirements.txt
+```
+4. Vous pouvez maintenant exécuter l'application en local. Il vous suffit de lancer le serveur local, à l'aide de la commande suivante :
+```		
+python server.py
+```
+5. L'application est prête à être utilisée. Vous pouvez utiliser un mail présent dans le fichier db/clubs.json pour vous connecter. Vous avez désormais accès aux fonctionnalités de l'application : réserver des places dans différentes compétitions, places qui seront déduites des points dont dispose le club.
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
+## Exécution des tests
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
-
-4. Current Setup
-
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
-
-5. Testing
-
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
-
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+Les tests ont été réalisés à l'aide de Pytest, pour les exécuter, lancer la commande suivante :
+```		
+pytest
+```
+Pour obtenir la couverture de test, celle-ci :
+```		
+pytest --cov=.
+```
+Pour générer un rapport HTML de la couverture de test, celle-ci :
+```		
+pytest --cov=. --cov-report html
+```
 
